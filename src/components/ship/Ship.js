@@ -1,7 +1,8 @@
 class Ship {
-  constructor(name, length) {
+  constructor(name, length, id) {
     this.name = name;
     this.points = new Array(length).fill(0);
+    this.id = id;
     this.hit = (point) => {
       this.points[point] = 1;
     };
