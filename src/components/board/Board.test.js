@@ -75,3 +75,14 @@ test("board will not place a ship off the edge of the battlefield", () => {
   expect(humBoard.place(6, 6, "h", battleship)).toBe(false);
   expect(humBoard.place(6, 6, "v", battleship)).toBe(false);
 })
+
+test("board won't place one ship on top of another", () => {
+  const humBoard = new Board("human");
+  const battleship = new Ship("battleship", 4, "b");
+  const submarine = new Ship("submarine", 3, "s");
+
+  humBoard.place(3, 2, "h", battleship);
+  expect(humBoard.place(0, 2, "v", submarine)).toBe(false);
+  expect(humBoard.place(3, 0, "h", submarine)).toBe(false);
+  expect(humBoard.place(0, 0, "h", submarine)).toBe(true);
+})
