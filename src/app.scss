@@ -7,4 +7,17 @@
 body {
   height: 100%;
   overflow-x: none;
+  #points {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    height: 40rem;
+    width: 40rem;
+    .point {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid black;
+    }
+  }
 }

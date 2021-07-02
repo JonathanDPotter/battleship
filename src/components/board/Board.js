@@ -14,11 +14,18 @@ class Board {
     ];
 
     this.target = (y, x) => {
-      if (this.points[y][x] === 0) {
-        this.points[y][x] = 1;
-        return true;
-      } else {
+      let pointHit = 0;
+
+      // check if targeted point has already been targeted
+      if (this.points[y][x] === 1) {
         return false;
+      } else {
+        // check if a ship is hit and return point hit
+        if (this.points[y][x] !== 0) {
+          pointHit = this.points[y][x];
+        }
+        this.points[y][x] = 1;
+        return pointHit;
       }
     };
 
@@ -47,6 +54,8 @@ class Board {
           }
           return true;
         }
+        
+        // below is for vertical placement
       } else {
         // checks if Ship will fit on Board
         if (x + length >= this.points[y].length) {
