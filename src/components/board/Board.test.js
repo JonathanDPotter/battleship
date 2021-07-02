@@ -81,8 +81,8 @@ test("board won't place one ship on top of another", () => {
   const battleship = new Ship("battleship", 4, "b");
   const submarine = new Ship("submarine", 3, "s");
 
-  humBoard.place(3, 2, "h", battleship);
+  humBoard.place(2, 2, "h", battleship);
   expect(humBoard.place(0, 2, "v", submarine)).toBe(false);
-  expect(humBoard.place(3, 0, "h", submarine)).toBe(false);
+  expect(humBoard.place(2, 0, "h", submarine)).toBe(false);
   expect(humBoard.place(0, 0, "h", submarine)).toBe(true);
 })

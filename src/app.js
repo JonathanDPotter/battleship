@@ -6,9 +6,9 @@ const humBoard = new Board("human");
 const battleship = new Ship("battleship", 4, "b");
 const submarine = new Ship("submarine", 3, "s");
 
-humBoard.target(2, 3);
-humBoard.place(3, 3, "h", battleship);
-humBoard.place(0, 0, "v", submarine);
+humBoard.target(0, 0);
+humBoard.place(2, 2, "h", battleship);
+humBoard.place(0, 2, "v", submarine);
 
 const body = document.getElementById("body");
 const title = document.createElement("h1");
