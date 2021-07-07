@@ -13,6 +13,8 @@ const aircraftCarrier = new Ship("aircraft carrier", 5, "a");
 const fire = (board, y, x) => {
   let pointHit = false;
 
+  console.log(y, x);
+
   if (board.points[y][x] === 1) {
     return false;
   } else {
@@ -61,56 +63,43 @@ const fire = (board, y, x) => {
   }
 };
 
-const playerTarget = (event) => {
-  console.log();
-}
+const displayBoard = (board) => {
+  const playerName = document.createElement("h1");
+  playerName.textContent = board.player;
+  body.appendChild(playerName);
+  const playerPoints = document.createElement("div");
+  playerPoints.className = "points";
+
+  board.points.forEach((line, i) => {
+    line.forEach((point, j) => {
+      const newPoint = document.createElement("div");
+      newPoint.className = "point";
+      newPoint.dataset.status = point;
+      newPoint.dataset.coord = [i, j];
+      const label = document.createElement("p");
+      label.textContent = newPoint.dataset.status;
+      newPoint.appendChild(label);
+      board.player === "computer"
+        ? newPoint.addEventListener("click", () =>
+            fire(board, newPoint.dataset.coord[0], newPoint.dataset.coord[2])
+          )
+        : null;
+      playerPoints.appendChild(newPoint);
+    });
+  });
+  body.appendChild(playerPoints);
+};
 
 humBoard.place(0, 0, "h", destroyer);
 humBoard.place(2, 2, "h", battleship);
 humBoard.place(3, 2, "v", submarine);
-fire(humBoard, 0, 0);
-fire(humBoard, 0, 1);
+humBoard.place(7, 0, "h", aircraftCarrier);
+console.log(humBoard.place(0, 7, "v", cruiser))
 
 const body = document.getElementById("body");
 const title = document.createElement("h1");
 title.textContent = "Battleship";
 body.appendChild(title);
 
-const computer = document.createElement("h1");
-computer.textContent = comBoard.player;
-body.appendChild(computer);
-const comPoints = document.createElement("div");
-comPoints.className = "points";
-
-comBoard.points.forEach((line) => {
-  line.forEach((point) => {
-    const newPoint = document.createElement("div");
-    newPoint.className = "point";
-    newPoint.dataset.status = point;
-    const label = document.createElement("p");
-    label.textContent = newPoint.dataset.status;
-    newPoint.appendChild(label);
-    newPoint.addEventListener("click", playerTarget())
-    comPoints.appendChild(newPoint);
-  });
-});
-body.appendChild(comPoints);
-
-const player = document.createElement("h1");
-player.textContent = humBoard.player;
-body.appendChild(player);
-const points = document.createElement("div");
-points.className = "points";
-
-humBoard.points.forEach((line) => {
-  line.forEach((point) => {
-    const newPoint = document.createElement("div");
-    newPoint.className = "point";
-    newPoint.dataset.status = point;
-    const label = document.createElement("p");
-    label.textContent = newPoint.dataset.status;
-    newPoint.appendChild(label);
-    points.appendChild(newPoint);
-  });
-});
-body.appendChild(points);
+displayBoard(comBoard);
+displayBoard(humBoard);
