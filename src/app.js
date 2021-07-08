@@ -4,6 +4,8 @@ import Ship from "./components/ship/Ship.js";
 
 const humBoard = new Board("human");
 const comBoard = new Board("computer");
+const humBoardContainer = document.getElementById("humBoard-container");
+const comBoardContainer = document.getElementById("comBoard-container");
 const battleship = new Ship("battleship", 4, "b");
 const submarine = new Ship("submarine", 3, "s");
 const cruiser = new Ship("cruiser", 3, "c");
@@ -13,7 +15,7 @@ const aircraftCarrier = new Ship("aircraft carrier", 5, "a");
 const fire = (board, y, x) => {
   let pointHit = false;
 
-  console.log(y, x);
+  console.log(board.player, y, x);
 
   if (board.points[y][x] === 1) {
     return false;
@@ -64,11 +66,9 @@ const fire = (board, y, x) => {
 };
 
 const displayBoard = (board) => {
-  const playerName = document.createElement("h1");
-  playerName.textContent = board.player;
-  body.appendChild(playerName);
   const playerPoints = document.createElement("div");
   playerPoints.className = "points";
+  playerPoints.id = board.player;
 
   board.points.forEach((line, i) => {
     line.forEach((point, j) => {
@@ -87,19 +87,37 @@ const displayBoard = (board) => {
       playerPoints.appendChild(newPoint);
     });
   });
-  body.appendChild(playerPoints);
+  board.player === "computer"
+    ? comBoardContainer.appendChild(playerPoints)
+    : humBoardContainer.appendChild(playerPoints);
+};
+
+const turn = () => {
+  const comBoardDisplay = document.getElementById("computer");
+  comBoardDisplay.addEventListener("click", () => {
+    console.log("click");
+    comBoardContainer.removeChild(comBoardContainer.firstChild);
+    displayBoard(comBoard);
+    fire(
+      humBoard,
+      Math.floor(Math.random() * 8),
+      Math.floor(Math.random() * 8)
+    );
+    humBoardContainer.removeChild(humBoardContainer.firstChild);
+    displayBoard(humBoard);
+  });
 };
 
 humBoard.place(0, 0, "h", destroyer);
 humBoard.place(2, 2, "h", battleship);
 humBoard.place(3, 2, "v", submarine);
 humBoard.place(7, 0, "h", aircraftCarrier);
-console.log(humBoard.place(0, 7, "v", cruiser))
-
-const body = document.getElementById("body");
-const title = document.createElement("h1");
-title.textContent = "Battleship";
-body.appendChild(title);
+console.log(humBoard.place(0, 7, "v", cruiser));
 
 displayBoard(comBoard);
 displayBoard(humBoard);
+
+
+for (let i = 0; i < 100; i++) {
+  turn();
+}
