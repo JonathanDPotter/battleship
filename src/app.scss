@@ -7,6 +7,9 @@
 body {
   height: 100%;
   overflow-x: none;
+  .information, .btn {
+    display: inline-block;
+  }
   .points {
     margin: 0 auto;
     display: grid;
@@ -24,4 +27,12 @@ body {
       }
     }
   }
+}
+
+.hidden {
+  display: none;
+}
+
+.noClick {
+  pointer-events: none;
 }

@@ -6,6 +6,8 @@ const humBoard = new Board("human");
 const comBoard = new Board("computer");
 const humBoardContainer = document.getElementById("humBoard-container");
 const comBoardContainer = document.getElementById("comBoard-container");
+const informationDisplay = document.getElementById("information");
+const toggleButton = document.getElementById("orientation-toggle");
 const battleship = new Ship("battleship", 4, "b");
 const submarine = new Ship("submarine", 3, "s");
 const cruiser = new Ship("cruiser", 3, "c");
@@ -81,8 +83,8 @@ const displayBoard = (board) => {
       newPoint.appendChild(label);
       board.player === "computer"
         ? newPoint.addEventListener("click", () =>
-            fire(board, newPoint.dataset.coord[0], newPoint.dataset.coord[2])
-          )
+          fire(board, newPoint.dataset.coord[0], newPoint.dataset.coord[2])
+        )
         : null;
       playerPoints.appendChild(newPoint);
     });
@@ -92,32 +94,48 @@ const displayBoard = (board) => {
     : humBoardContainer.appendChild(playerPoints);
 };
 
+const setupGame = () => {
+  let counter = 0;
+  displayBoard(humBoard);
+  humBoardContainer.addEventListener("click", () => {
+
+    counter++
+    humBoardContainer.removeChild(humBoardContainer.firstChild);
+    displayBoard(humBoard);
+  });
+  toggleButton.addEventListener("click", () => {
+    toggleButton.dataset.orientation === "h"
+      ? (toggleButton.dataset.orientation = "v")
+      : (toggleButton.dataset.orientation = "h");
+  });
+  const shipArray = [
+    aircraftCarrier,
+    battleship,
+    submarine,
+    cruiser,
+    destroyer,
+  ];
+  while (counter < 5) {
+    informationDisplay.textContent = `place ${shipArray[counter].name}`;
+
+  }
+};
+
 const turn = () => {
   const comBoardDisplay = document.getElementById("computer");
   comBoardDisplay.addEventListener("click", () => {
-    console.log("click");
     comBoardContainer.removeChild(comBoardContainer.firstChild);
     displayBoard(comBoard);
     fire(
       humBoard,
       Math.floor(Math.random() * 8),
       Math.floor(Math.random() * 8)
-    );
-    humBoardContainer.removeChild(humBoardContainer.firstChild);
-    displayBoard(humBoard);
-  });
-};
-
-humBoard.place(0, 0, "h", destroyer);
-humBoard.place(2, 2, "h", battleship);
-humBoard.place(3, 2, "v", submarine);
-humBoard.place(7, 0, "h", aircraftCarrier);
-console.log(humBoard.place(0, 7, "v", cruiser));
-
-displayBoard(comBoard);
-displayBoard(humBoard);
-
-
-for (let i = 0; i < 100; i++) {
-  turn();
-}
+      );
+      humBoardContainer.removeChild(humBoardContainer.firstChild);
+      displayBoard(humBoard);
+    });
+  };
+  
+  setupGame();
+  displayBoard(comBoard);
+  
