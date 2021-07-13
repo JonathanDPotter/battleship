@@ -13,6 +13,15 @@ const submarine = new Ship("submarine", 3, "s");
 const cruiser = new Ship("cruiser", 3, "c");
 const destroyer = new Ship("destroyer", 2, "d");
 const aircraftCarrier = new Ship("aircraft carrier", 5, "a");
+let placementCounter = 0;
+const shipArray = [
+  aircraftCarrier,
+  battleship,
+  submarine,
+  cruiser,
+  destroyer,
+  { name: "" },
+];
 
 const fire = (board, y, x) => {
   let pointHit = false;
@@ -83,9 +92,16 @@ const displayBoard = (board) => {
       newPoint.appendChild(label);
       board.player === "computer"
         ? newPoint.addEventListener("click", () =>
-          fire(board, newPoint.dataset.coord[0], newPoint.dataset.coord[2])
-        )
-        : null;
+            fire(board, newPoint.dataset.coord[0], newPoint.dataset.coord[2])
+          )
+        : newPoint.addEventListener("click", () => {
+            humBoard.place(
+              newPoint.dataset.coord[0],
+              newPoint.dataset.coord[1],
+              toggleButton.dataset.orientation,
+              shipArray[placementCounter]
+            );
+          });
       playerPoints.appendChild(newPoint);
     });
   });
@@ -95,30 +111,19 @@ const displayBoard = (board) => {
 };
 
 const setupGame = () => {
-  let counter = 0;
   displayBoard(humBoard);
+
+  informationDisplay.textContent = `Place ${shipArray[placementCounter].name}`;
   humBoardContainer.addEventListener("click", () => {
-
-    counter++
-    humBoardContainer.removeChild(humBoardContainer.firstChild);
-    displayBoard(humBoard);
+    placementCounter < 5 ? placementCounter++ : null;
+    if (placementCounter === 5) {
+      informationDisplay.style.display = "none";
+      toggleButton.style.display = "none";
+      humBoardContainer.style.pointerEvents = "none";
+    } else {
+      informationDisplay.textContent = `Place ${shipArray[placementCounter].name}`;
+    }
   });
-  toggleButton.addEventListener("click", () => {
-    toggleButton.dataset.orientation === "h"
-      ? (toggleButton.dataset.orientation = "v")
-      : (toggleButton.dataset.orientation = "h");
-  });
-  const shipArray = [
-    aircraftCarrier,
-    battleship,
-    submarine,
-    cruiser,
-    destroyer,
-  ];
-  while (counter < 5) {
-    informationDisplay.textContent = `place ${shipArray[counter].name}`;
-
-  }
 };
 
 const turn = () => {
@@ -130,12 +135,10 @@ const turn = () => {
       humBoard,
       Math.floor(Math.random() * 8),
       Math.floor(Math.random() * 8)
-      );
-      humBoardContainer.removeChild(humBoardContainer.firstChild);
-      displayBoard(humBoard);
-    });
-  };
-  
-  setupGame();
-  displayBoard(comBoard);
-  
+    );
+    humBoardContainer.removeChild(humBoardContainer.firstChild);
+    displayBoard(humBoard);
+  });
+};
+
+setupGame();
