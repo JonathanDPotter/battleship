@@ -9,12 +9,15 @@ const humBoardContainer = document.getElementById("humBoard-container");
 const comBoardContainer = document.getElementById("comBoard-container");
 const informationDisplay = document.getElementById("information");
 const toggleButton = document.getElementById("orientation-toggle");
-const battleship = new Ship("battleship", 4, "b");
-const submarine = new Ship("submarine", 3, "s");
-const cruiser = new Ship("cruiser", 3, "c");
-const destroyer = new Ship("destroyer", 2, "d");
-const aircraftCarrier = new Ship("aircraft carrier", 5, "a");
-let placementCounter = 0;
+
+const [battleship, submarine, cruiser, destroyer, aircraftCarrier] = [
+  new Ship("battleship", 4, "b"),
+  new Ship("submarine", 3, "s"),
+  new Ship("cruiser", 3, "c"),
+  new Ship("destroyer", 2, "d"),
+  new Ship("aircraft carrier", 5, "a"),
+];
+
 const shipArray = [
   aircraftCarrier,
   battleship,
@@ -23,6 +26,17 @@ const shipArray = [
   destroyer,
   { name: "" },
 ];
+
+const [comAc, comDes, comCruise, comSub, comBatt] = [
+  new Ship("comAc", 5, "a"),
+  new Ship("comDes", 2, "d"),
+  new Ship("comCruise", 3, "c"),
+  new Ship("comSub", 3, "s"),
+  new Ship("comBatt", 4, "b"),
+];
+
+const comShipArray = [comAc, comDes, comCruise, comSub, comBatt];
+let placementCounter = 0;
 
 const fire = (board, y, x) => {
   let pointHit = false;
@@ -78,11 +92,25 @@ const fire = (board, y, x) => {
 };
 
 const setupGame = () => {
+  comShipArray.forEach((ship) => {
+    let placed = true;
+    let counter = 0;
+    do {
+      placed = comBoard.place(
+        Math.floor(Math.random() * 8),
+        Math.floor(Math.random() * 8),
+        Math.random() < 0.5 ? "h" : "v",
+        ship
+      );
+    } while (placed === false);
+  });
+
   toggleButton.addEventListener("click", () => {
     toggleButton.dataset.orientation === "h"
       ? (toggleButton.dataset.orientation = "v")
       : (toggleButton.dataset.orientation = "h");
   });
+
   displayBoard(humBoard);
 
   informationDisplay.textContent = `Place ${shipArray[placementCounter].name}`;
@@ -110,8 +138,8 @@ const turn = () => {
       humBoard,
       Math.floor(Math.random() * 8),
       Math.floor(Math.random() * 8)
-      );
-      humBoardContainer.removeChild(humBoardContainer.firstChild);
+    );
+    humBoardContainer.removeChild(humBoardContainer.firstChild);
     displayBoard(humBoard);
     turn();
   });

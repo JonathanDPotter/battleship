@@ -2,7 +2,6 @@ import {
   comBoardContainer,
   humBoardContainer,
   humBoard,
-  comBoard,
   toggleButton,
   shipArray,
   placementCounter,
@@ -21,7 +20,13 @@ const displayBoard = (board) => {
       newPoint.dataset.status = point;
       newPoint.dataset.coord = [i, j];
       const label = document.createElement("p");
-      label.textContent = newPoint.dataset.status;
+      if (board.player === "computer") {
+        newPoint.dataset.status.length > 1
+          ? (label.textContent = 0)
+          : (label.textContent = newPoint.dataset.status);
+      } else {
+        label.textContent = newPoint.dataset.status;
+      }
       newPoint.appendChild(label);
       board.player === "computer"
         ? newPoint.addEventListener("click", () =>

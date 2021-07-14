@@ -17,14 +17,16 @@ class Board {
       let pointHit = 0;
 
       // check if targeted point has already been targeted
-      if (this.points[y][x] === 1) {
+      if (this.points[y][x] === 1 || this.points[y][x] === 2) {
         return false;
       } else {
         // check if a ship is hit and return point hit
         if (this.points[y][x] !== 0) {
           pointHit = this.points[y][x];
+          this.points[y][x] = 2;
+        } else {
+          this.points[y][x] = 1;
         }
-        this.points[y][x] = 1;
         return pointHit;
       }
     };
@@ -33,13 +35,13 @@ class Board {
       const { length } = ship;
       const checkPoints = [];
 
-      console.log(y, x, orient, ship.name)
-      console.log(`length: ${length}`, length + x)
+      console.log(y, x, orient, ship.name);
+      console.log(`length: ${length}`, length + x);
       // checks if placement is horizontal
       if (orient === "h") {
         // checks if Ship will fit on Board
         if (x + length > 9) {
-          console.log("horizontal won't fit")
+          console.log("horizontal won't fit");
           return false;
         } else {
           for (let i = 0; i < length; i++) {
@@ -49,7 +51,7 @@ class Board {
 
         // checks if Ship will overlap another Ship
         if (!checkPoints.every((point) => point === 0)) {
-          console.log("horiz overlap")
+          console.log("horiz overlap");
           console.log(checkPoints);
           return false;
         } else {
@@ -59,12 +61,12 @@ class Board {
           }
           return true;
         }
-        
+
         // below is for vertical placement
       } else {
         // checks if Ship will fit on Board
         if (y + length > 9) {
-          console.log("vertical won't fit")
+          console.log("vertical won't fit");
           return false;
         } else {
           // get a view of the points to be covered by Ship
@@ -75,7 +77,7 @@ class Board {
 
         // checks if Ship will overlap another Ship
         if (!checkPoints.every((point) => point === 0)) {
-          console.log("vert overlap")
+          console.log("vert overlap");
           return false;
         } else {
           for (let i = 0; i < length; i++) {
