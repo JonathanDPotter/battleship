@@ -33,6 +33,8 @@ class Board {
       const { length } = ship;
       const checkPoints = [];
 
+      console.log(y, x, orient, ship.name)
+      console.log(`length: ${length}`, length + x)
       // checks if placement is horizontal
       if (orient === "h") {
         // checks if Ship will fit on Board
@@ -48,6 +50,7 @@ class Board {
         // checks if Ship will overlap another Ship
         if (!checkPoints.every((point) => point === 0)) {
           console.log("horiz overlap")
+          console.log(checkPoints);
           return false;
         } else {
           // get a view of the points to be covered by Ship

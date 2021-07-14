@@ -1,6 +1,7 @@
 import "./app.scss";
 import Board from "./components/board/Board.js";
 import Ship from "./components/ship/Ship.js";
+import displayBoard from "./components/displayBoard";
 
 const humBoard = new Board("human");
 const comBoard = new Board("computer");
@@ -76,53 +77,27 @@ const fire = (board, y, x) => {
   }
 };
 
-const displayBoard = (board) => {
-  const playerPoints = document.createElement("div");
-  playerPoints.className = "points";
-  playerPoints.id = board.player;
-
-  board.points.forEach((line, i) => {
-    line.forEach((point, j) => {
-      const newPoint = document.createElement("div");
-      newPoint.className = "point";
-      newPoint.dataset.status = point;
-      newPoint.dataset.coord = [i, j];
-      const label = document.createElement("p");
-      label.textContent = newPoint.dataset.status;
-      newPoint.appendChild(label);
-      board.player === "computer"
-        ? newPoint.addEventListener("click", () =>
-            fire(board, newPoint.dataset.coord[0], newPoint.dataset.coord[2])
-          )
-        : newPoint.addEventListener("click", () => {
-            humBoard.place(
-              newPoint.dataset.coord[0],
-              newPoint.dataset.coord[1],
-              toggleButton.dataset.orientation,
-              shipArray[placementCounter]
-            );
-          });
-      playerPoints.appendChild(newPoint);
-    });
-  });
-  board.player === "computer"
-    ? comBoardContainer.appendChild(playerPoints)
-    : humBoardContainer.appendChild(playerPoints);
-};
-
 const setupGame = () => {
+  toggleButton.addEventListener("click", () => {
+    toggleButton.dataset.orientation === "h"
+      ? (toggleButton.dataset.orientation = "v")
+      : (toggleButton.dataset.orientation = "h");
+  });
   displayBoard(humBoard);
 
   informationDisplay.textContent = `Place ${shipArray[placementCounter].name}`;
   humBoardContainer.addEventListener("click", () => {
-    placementCounter < 5 ? placementCounter++ : null;
     if (placementCounter === 5) {
       informationDisplay.style.display = "none";
       toggleButton.style.display = "none";
       humBoardContainer.style.pointerEvents = "none";
+      displayBoard(comBoard);
+      turn();
     } else {
       informationDisplay.textContent = `Place ${shipArray[placementCounter].name}`;
     }
+    humBoardContainer.removeChild(humBoardContainer.firstChild);
+    displayBoard(humBoard);
   });
 };
 
@@ -135,10 +110,22 @@ const turn = () => {
       humBoard,
       Math.floor(Math.random() * 8),
       Math.floor(Math.random() * 8)
-    );
-    humBoardContainer.removeChild(humBoardContainer.firstChild);
+      );
+      humBoardContainer.removeChild(humBoardContainer.firstChild);
     displayBoard(humBoard);
+    turn();
   });
 };
 
 setupGame();
+
+export {
+  humBoardContainer,
+  comBoardContainer,
+  humBoard,
+  comBoard,
+  toggleButton,
+  shipArray,
+  placementCounter,
+  fire,
+};
