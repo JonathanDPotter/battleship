@@ -27,6 +27,7 @@ class Board {
         } else {
           this.points[y][x] = 1;
         }
+        
         return pointHit;
       }
     };

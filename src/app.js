@@ -36,12 +36,16 @@ const [comAc, comDes, comCruise, comSub, comBatt] = [
 ];
 
 const comShipArray = [comAc, comDes, comCruise, comSub, comBatt];
-let placementCounter = 0;
+let placementCounter = 0,
+  humShipsSunk = 0,
+  comShipsSunk = 0;
+
+const tallySunkShip = (player) => {
+  player === "computer" ? comShipsSunk++ : humShipsSunk++;
+};
 
 const fire = (board, y, x) => {
   let pointHit = false;
-
-  console.log(board.player, y, x);
 
   if (board.points[y][x] === 1) {
     return false;
@@ -56,30 +60,35 @@ const fire = (board, y, x) => {
           aircraftCarrier.hit(shipPoint);
           if (aircraftCarrier.isSunk()) {
             console.log("Aircraft Carrier sunk!");
+            tallySunkShip(board.player);
           }
           break;
         case "b":
           battleship.hit(shipPoint);
           if (battleship.isSunk()) {
             console.log("Battleship sunk!");
+            tallySunkShip(board.player);
           }
           break;
         case "c":
           cruiser.hit(shipPoint);
           if (cruiser.isSunk()) {
             console.log("Cruiser sunk!");
+            tallySunkShip(board.player);
           }
           break;
         case "d":
           destroyer.hit(shipPoint);
           if (destroyer.isSunk()) {
             console.log("Destroyer sunk!");
+            tallySunkShip(board.player);
           }
           break;
         case "s":
           submarine.hit(shipPoint);
           if (submarine.isSunk()) {
             console.log("Submarine sunk!");
+            tallySunkShip(board.player);
           }
           break;
         default:
@@ -141,7 +150,13 @@ const turn = () => {
     );
     humBoardContainer.removeChild(humBoardContainer.firstChild);
     displayBoard(humBoard);
-    turn();
+    if (comShipsSunk === 5 || humShipsSunk === 5) {
+      let winner = "";
+      comShipsSunk === 5 ? (winner = "Human") : (winner = "Computer");
+      console.log(`${winner} has won.`);
+    } else {
+      turn();
+    }
   });
 };
 

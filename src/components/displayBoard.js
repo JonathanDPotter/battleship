@@ -24,6 +24,9 @@ const displayBoard = (board) => {
         newPoint.dataset.status.length > 1
           ? (label.textContent = 0)
           : (label.textContent = newPoint.dataset.status);
+        newPoint.dataset.status === 1 || newPoint.dataset.status === 2
+          ? (newPoint.style.pointerEvents = "none")
+          : null;
       } else {
         label.textContent = newPoint.dataset.status;
       }
